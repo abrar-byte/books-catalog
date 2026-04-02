@@ -1,19 +1,27 @@
-import { Button } from "@/components/ui/button"
+import { buildMetadata, siteConfig } from "@/lib/seo"
+import { objectAny } from "@/types"
+import BookList from "./home/BookList"
+import Hero from "./home/Hero"
 
-export default function Page() {
+import Newsletter from "./home/Newsletter"
+
+export const metadata = buildMetadata({
+  title: siteConfig.name,
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  url: "/",
+})
+
+type HomePageProps = {
+  searchParams: objectAny
+}
+export default async function Page({ searchParams }: HomePageProps) {
+  const { page = 1, limit = 10 } = await searchParams
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
+    <>
+      <Hero />
+      <BookList page={page} limit={limit} />
+      <Newsletter />
+    </>
   )
 }

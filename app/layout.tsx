@@ -1,18 +1,26 @@
-import { Geist, Geist_Mono, Manrope } from "next/font/google"
+import { Manrope, Quicksand } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
+import Header from "@/components/layout/Header"
+import { buildMetadata, siteConfig } from "@/lib/seo"
+import Head from "next/head"
 
-const manropeHeading = Manrope({subsets:['latin'],variable:'--font-heading'});
-
-const fontSans = Geist({
+const manropeHeading = Manrope({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-heading",
+})
+const quicksandFont = Quicksand({
+  subsets: ["latin"],
+  variable: "--font-quicksand",
 })
 
-const geistMono = Geist_Mono({subsets:['latin'],variable:'--font-mono'})
-
+export const metadata = buildMetadata({
+  title: siteConfig.name,
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+})
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,10 +30,19 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontSans.variable, "font-mono", geistMono.variable, manropeHeading.variable)}
+      className={cn(
+        "antialiased",
+        manropeHeading.variable,
+        quicksandFont.variable
+      )}
     >
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <body className={quicksandFont.className}>
+        <ThemeProvider>
+          <Header />
+          {children}
+          {/* <Footer /> */}
+        </ThemeProvider>
       </body>
     </html>
   )
